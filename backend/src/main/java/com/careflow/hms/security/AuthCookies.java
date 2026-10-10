@@ -26,14 +26,19 @@ public class AuthCookies {
 
     private final CareFlowProperties props;
 
+    /** Non-secret marker ("a session probably exists") used by the web app's route middleware. */
+    public static final String SESSION_HINT = "cf_sess";
+
     public void write(HttpServletResponse res, String accessToken, String refreshToken) {
         res.addHeader(HttpHeaders.SET_COOKIE, cookie(ACCESS, accessToken, "/", props.security().accessTokenTtl()).toString());
         res.addHeader(HttpHeaders.SET_COOKIE, cookie(REFRESH, refreshToken, REFRESH_PATH, props.security().refreshTokenTtl()).toString());
+        res.addHeader(HttpHeaders.SET_COOKIE, cookie(SESSION_HINT, "1", "/", props.security().refreshTokenTtl()).toString());
     }
 
     public void clear(HttpServletResponse res) {
         res.addHeader(HttpHeaders.SET_COOKIE, cookie(ACCESS, "", "/", Duration.ZERO).toString());
         res.addHeader(HttpHeaders.SET_COOKIE, cookie(REFRESH, "", REFRESH_PATH, Duration.ZERO).toString());
+        res.addHeader(HttpHeaders.SET_COOKIE, cookie(SESSION_HINT, "", "/", Duration.ZERO).toString());
     }
 
     public static Optional<String> read(HttpServletRequest req, String name) {
