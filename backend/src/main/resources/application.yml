@@ -1,0 +1,93 @@
+server:
+  port: ${PORT:8080}
+  error:
+    include-message: never
+    include-stacktrace: never
+  servlet:
+    session:
+      tracking-modes: cookie
+  forward-headers-strategy: framework
+
+spring:
+  application:
+    name: careflow-hms
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5440/careflow}
+    username: ${DB_USERNAME:careflow}
+    password: ${DB_PASSWORD:careflow_dev_pw}
+    hikari:
+      maximum-pool-size: 15
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+        format_sql: false
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+  jackson:
+    time-zone: UTC
+    default-property-inclusion: non_null
+    serialization:
+      write-dates-as-timestamps: false
+    deserialization:
+      fail-on-unknown-properties: false
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 12MB
+  mvc:
+    problemdetails:
+      enabled: false
+
+springdoc:
+  api-docs:
+    path: /api/docs
+  swagger-ui:
+    path: /api/swagger-ui
+    persist-authorization: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: never
+
+careflow:
+  security:
+    jwt-secret: ${JWT_SECRET:dev-only-secret-change-me-dev-only-secret-change-me-0123456789}
+    access-token-ttl: PT15M
+    refresh-token-ttl: P7D
+    cookie-secure: ${COOKIE_SECURE:false}
+    login:
+      max-failed-attempts: 5
+      lockout-duration: PT15M
+      rate-limit-per-minute: 20
+  storage:
+    upload-dir: ${UPLOAD_DIR:./uploads}
+    download-token-ttl: PT5M
+  frontend-base-url: ${FRONTEND_BASE_URL:http://localhost:3000}
+  demo:
+    # Seeds clearly fictional demonstration data when the database is empty.
+    enabled: ${DEMO_SEED:false}
+  dev:
+    # Exposes a development-only outbox of "sent" emails/SMS. Never enable in production.
+    outbox-enabled: ${DEV_OUTBOX:false}
+  jobs:
+    medication-overdue-scan: PT1M
+    follow-up-reminder-scan: PT5M
+
+logging:
+  level:
+    root: INFO
+    com.careflow: INFO
+    org.hibernate.SQL: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd'T'HH:mm:ss.SSSXXX} %5p [%X{traceId:-}] [%X{userId:-}] %logger{36} - %m%n"

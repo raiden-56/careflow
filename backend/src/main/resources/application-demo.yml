@@ -1,0 +1,6 @@
+# Development / demonstration profile. Seeds fictional data and enables the dev outbox.
+careflow:
+  demo:
+    enabled: true
+  dev:
+    outbox-enabled: true

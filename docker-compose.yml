@@ -1,0 +1,57 @@
+# CareFlow HMS - local development stack.
+#   docker compose up -d postgres          -> database only (run backend/frontend from source)
+#   docker compose --profile full up -d    -> database + backend + frontend containers
+# All credentials below are development-only defaults. Override them via a .env file.
+name: careflow
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-careflow}
+      POSTGRES_USER: ${POSTGRES_USER:-careflow}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-careflow_dev_pw}
+    ports:
+      - "${POSTGRES_PORT:-5440}:5432"
+    volumes:
+      - careflow_pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-careflow} -d ${POSTGRES_DB:-careflow}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  backend:
+    profiles: ["full"]
+    build: ./backend
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: demo
+      DB_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-careflow}
+      DB_USERNAME: ${POSTGRES_USER:-careflow}
+      DB_PASSWORD: ${POSTGRES_PASSWORD:-careflow_dev_pw}
+      JWT_SECRET: ${JWT_SECRET:-dev-only-secret-change-me-dev-only-secret-change-me-0123456789}
+      COOKIE_SECURE: "false"
+    ports:
+      - "8080:8080"
+    volumes:
+      - careflow_uploads:/app/uploads
+
+  frontend:
+    profiles: ["full"]
+    build:
+      context: ./frontend
+      args:
+        BACKEND_URL: http://backend:8080
+    depends_on:
+      - backend
+    environment:
+      BACKEND_URL: http://backend:8080
+    ports:
+      - "3000:3000"
+
+volumes:
+  careflow_pg:
+  careflow_uploads:
