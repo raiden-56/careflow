@@ -94,6 +94,7 @@ public class DemoDataSeeder implements ApplicationRunner {
     private final JdbcTemplate jdbc;
     private final List<DemoSeedContributor> contributors;
     private final jakarta.persistence.EntityManager em;
+    private final CoreMedicationSeed medicationSeed;
 
     private String demoHash;
 
@@ -311,6 +312,8 @@ public class DemoDataSeeder implements ApplicationRunner {
         admit(ctx, "sanjay", "SURG", "dr_khan", "PVT", "504", "A", 5.0, null,
                 "Symptomatic cholelithiasis; elective laparoscopic cholecystectomy.", Admission.AdmissionType.ELECTIVE, false);
         discharge(ctx, "sanjay", 2.0);
+
+        medicationSeed.seed(ctx);
 
         // Care-team members and bed housekeeping states for a realistic bed board.
         ctx.actAs("admin", () -> {

@@ -33,6 +33,8 @@ import java.util.function.Supplier;
  *       fatima (PENDING_BED); (discharged): lakshmi, rohan, sanjay</li>
  *   <li>departments: GEN_MED, CARD, SURG, ORTHO, PAED, CRIT; wards: MWA, CCU, SWB, ICU, PVT, PAE</li>
  *   <li>tariffs: by code (e.g. ROOM_GENERAL, LAB_CBC, CONS_DAILY)</li>
+ *   <li>medications: catalogue by code (MED-...); ACTIVE medication orders exist for the open admissions
+ *       (no MAR rows, dispensations or stock yet). deepa is ADMITTED (the discharge contributor starts her workflow).</li>
  * </ul>
  */
 public class DemoContext {
@@ -45,6 +47,8 @@ public class DemoContext {
     public final Map<String, UUID> departments = new LinkedHashMap<>();
     public final Map<String, UUID> wards = new LinkedHashMap<>();
     public final Map<String, UUID> tariffs = new LinkedHashMap<>();
+    /** Medication catalogue ids by code (e.g. MED-CEFTRX1G); active prescriptions are seeded for open admissions. */
+    public final Map<String, UUID> medications = new LinkedHashMap<>();
     public final List<String> log = new ArrayList<>();
 
     public DemoContext(Organization organization, RolePermissionService rolePermissions) {
