@@ -21,3 +21,6 @@ frontend/.env.local
 *.iml
 .DS_Store
 Thumbs.db
+
+# Local agent tooling / worktrees
+.claude/
