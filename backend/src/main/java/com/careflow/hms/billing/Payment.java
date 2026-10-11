@@ -65,4 +65,8 @@ public class Payment extends TenantEntity {
     private UUID reversedBy;
     private Instant reversedAt;
     private String reversalReason;
+
+    /** True when the payment was explicitly accepted beyond the outstanding balance (advance deposit). */
+    @Column(name = "is_advance", nullable = false, updatable = false)
+    private boolean advance;
 }

@@ -70,6 +70,7 @@ public class LedgerService {
         e.setReferenceNumber(referenceNumber);
         e.setDescription(description.length() > 500 ? description.substring(0, 500) : description);
         e.setCreatedBy(TenantContext.actorId());
+        e.setCreatedAt(BillingClock.now());
         return ledger.save(e);
     }
 

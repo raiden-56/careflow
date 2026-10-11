@@ -70,6 +70,8 @@ const MAP: Record<string, StatusMeta> = {
   UNDER_REVIEW: T('Under review', 'info'),
   PARTIALLY_APPROVED: T('Partially approved', 'warning'),
   SETTLED: T('Settled', 'success'),
+  IN_REVIEW: T('In review', 'info'),
+  ADVANCE: T('Advance', 'info'),
   // transfers
   REQUESTED: T('Requested', 'info'),
   // alerts / priority
