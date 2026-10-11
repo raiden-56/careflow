@@ -111,6 +111,38 @@ public class AuditService {
         repository.save(e);
     }
 
+    /**
+     * Records an event for an explicitly identified actor and organization (e.g. a document download
+     * authorized by a signed link, or a platform action recorded in the affected hospital's log).
+     */
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void recordAs(UUID orgId, UUID actorId, String actorName, String actorRole, String action,
+                         String entityType, UUID entityId, UUID patientId, AuditEvent.Outcome outcome,
+                         String summary, Map<String, Object> details) {
+        if (Boolean.TRUE.equals(SUPPRESSED.get())) {
+            return;
+        }
+        try {
+            AuditEvent e = new AuditEvent();
+            e.setOrganizationId(orgId);
+            e.setActorUserId(actorId);
+            e.setActorName(actorName);
+            e.setActorRole(actorRole);
+            e.setAction(action);
+            e.setEntityType(entityType);
+            e.setEntityId(entityId);
+            e.setPatientId(patientId);
+            e.setOutcome(outcome);
+            e.setSummary(summary == null ? null : summary.length() > 1000 ? summary.substring(0, 1000) : summary);
+            e.setDetails(details);
+            e.setIpAddress(clientIp());
+            e.setTraceId(MDC.get(TraceIdFilter.MDC_KEY));
+            repository.save(e);
+        } catch (RuntimeException ex) {
+            log.error("Failed to write audit event {} {}", action, entityId, ex);
+        }
+    }
+
     public static String clientIp() {
         if (RequestContextHolder.getRequestAttributes() instanceof ServletRequestAttributes attrs) {
             HttpServletRequest req = attrs.getRequest();

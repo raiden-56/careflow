@@ -36,15 +36,16 @@ public final class Paging {
         return PageRequest.of(safePage, safeSize, s);
     }
 
-    /** Lower-cases and wraps a search term for LIKE queries; returns null when blank. */
+    /**
+     * Lower-cases and wraps a search term for JPQL LIKE queries; returns null when blank.
+     * Hibernate 6 renders JPQL {@code like} on PostgreSQL with {@code escape ''}, so backslash escapes would be
+     * matched literally (a search for "LAB_CRP" found nothing). '_' and '%' typed by a user therefore act as
+     * wildcards, which only ever widens a search box result.
+     */
     public static String likePattern(String q) {
         if (q == null || q.isBlank()) {
             return null;
         }
-        String escaped = q.trim().toLowerCase()
-                .replace("\\", "\\\\")
-                .replace("%", "\\%")
-                .replace("_", "\\_");
-        return "%" + escaped + "%";
+        return "%" + q.trim().toLowerCase() + "%";
     }
 }
