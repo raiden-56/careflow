@@ -152,7 +152,14 @@ export function DataTable<T>(props: DataTableProps<T>) {
             );
             return (
               <Card key={rowKey(row)} sx={{ ...rowSx?.(row) }}>
-                {onRowClick ? <CardActionArea onClick={() => onRowClick(row)}>{content}</CardActionArea> : content}
+                {onRowClick ? (
+                  // Rendered as a div (role="button") so cells may contain their own buttons without nesting <button>s.
+                  <CardActionArea component="div" onClick={() => onRowClick(row)}>
+                    {content}
+                  </CardActionArea>
+                ) : (
+                  content
+                )}
               </Card>
             );
           })}
