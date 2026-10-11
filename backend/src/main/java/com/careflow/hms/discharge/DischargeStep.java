@@ -61,8 +61,15 @@ public class DischargeStep extends TenantEntity {
     @Column(nullable = false)
     private Priority priority = Priority.NORMAL;
 
+    /** Snapshot of the template description at initiation. */
+    private String description;
+
+    /** Snapshot of the template's automatic check key (see DischargeChecks), or null for manual steps. */
+    private String autoCheck;
+
     private UUID assignedTo;
     private String blockerReason;
+    private String notApplicableReason;
     private String nextAction;
     private String notes;
     private UUID updatedBy;

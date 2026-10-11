@@ -51,6 +51,13 @@ const MAP: Record<string, StatusMeta> = {
   AUTHORIZED: T('Authorized', 'success'),
   CLEARED: T('Cleared', 'success'),
   EXCEPTION: T('Exception', 'warning'),
+  REVOKED: T('Withdrawn', 'warning'),
+  WAITING: T('Waiting', 'neutral'),
+  // notification deliveries
+  SENT: T('Sent', 'success'),
+  DELIVERED: T('Delivered', 'success'),
+  SKIPPED: T('Skipped', 'neutral'),
+  FAILED: T('Failed', 'error'),
   // billing
   OPEN: T('Open', 'info'),
   FINALIZED: T('Finalized', 'primary'),

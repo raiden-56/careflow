@@ -50,6 +50,13 @@ public class FollowUp extends TenantEntity {
     private Instant reminderSentAt;
     private Instant completedAt;
     private String outcomeNotes;
+    private UUID outcomeRecordedBy;
+
+    /** RESULT_REVIEW follow-ups: the investigation explicitly handed over for review after discharge. */
+    private UUID labOrderId;
+
+    @Column(nullable = false)
+    private Instant updatedAt = Instant.now();
 
     @Column(nullable = false)
     private UUID createdBy;
