@@ -32,6 +32,7 @@ public class SettingsService {
     public static final String BED_TURNOVER_STATUS = "bed.turnoverStatusAfterDischarge";
     public static final String VITALS_EXPECTED_INTERVAL_HOURS = "observations.expectedIntervalHours";
     public static final String NURSE_MAY_HOLD_DOSE = "medication.nurseMayHoldDose";
+    public static final String BILLING_OVERDUE_DAYS = "billing.overdueAfterDays";
 
     public static final List<SettingDef> DEFINITIONS = List.of(
             new SettingDef(MED_OVERDUE_GRACE_MINUTES, "30", "Minutes after the scheduled time before a dose is flagged overdue"),
@@ -46,7 +47,8 @@ public class SettingsService {
             new SettingDef(OPERATING_HOURS, "IPD 24x7; OPD Mon-Sat 09:00-17:00; Billing desk 08:00-20:00", "Hospital operating hours shown to staff and patients"),
             new SettingDef(BED_TURNOVER_STATUS, "CLEANING", "Bed status applied when a patient vacates a bed (CLEANING or MAINTENANCE)"),
             new SettingDef(VITALS_EXPECTED_INTERVAL_HOURS, "6", "Expected maximum interval between vital-sign recordings (missing-data indicator)"),
-            new SettingDef(NURSE_MAY_HOLD_DOSE, "true", "Nurses may record a HELD dose with a documented clinical reason (does not change the prescription)"));
+            new SettingDef(NURSE_MAY_HOLD_DOSE, "true", "Nurses may record a HELD dose with a documented clinical reason (does not change the prescription)"),
+            new SettingDef(BILLING_OVERDUE_DAYS, "30", "Days after discharge from which an unpaid balance is flagged overdue"));
 
     private static final Map<String, SettingDef> BY_KEY = new LinkedHashMap<>();
 

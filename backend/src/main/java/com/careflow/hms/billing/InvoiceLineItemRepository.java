@@ -14,4 +14,13 @@ public interface InvoiceLineItemRepository extends JpaRepository<InvoiceLineItem
                                                                              InvoiceLineItem.SourceType sourceType,
                                                                              UUID sourceId, LocalDate serviceDate,
                                                                              InvoiceLineItem.Status status);
+
+    /** Whether a bed-day charge of a category (ROOM / NURSING) is already posted for a calendar day. */
+    boolean existsByInvoiceIdAndSourceTypeAndCategoryAndServiceDateAndStatus(UUID invoiceId,
+                                                                             InvoiceLineItem.SourceType sourceType,
+                                                                             ServiceTariff.Category category,
+                                                                             LocalDate serviceDate,
+                                                                             InvoiceLineItem.Status status);
+
+    boolean existsByInvoiceIdAndStatus(UUID invoiceId, InvoiceLineItem.Status status);
 }

@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
@@ -132,7 +131,7 @@ public class ChargeService {
         line.setStatus(InvoiceLineItem.Status.POSTED);
         line.setReason(req.reason());
         line.setPostedBy(TenantContext.actorId());
-        line.setPostedAt(Instant.now());
+        line.setPostedAt(BillingClock.now());
         line = lines.saveAndFlush(line);
         ledger.post(invoice, LedgerEntry.EntryType.CHARGE, line.getTotalAmount(), "INVOICE_LINE", line.getId(),
                 invoice.getInvoiceNumber(), line.getDescription());
@@ -174,7 +173,7 @@ public class ChargeService {
         rev.setReversesLineId(original.getId());
         rev.setReason(reason);
         rev.setPostedBy(TenantContext.actorId());
-        rev.setPostedAt(Instant.now());
+        rev.setPostedAt(BillingClock.now());
         rev = lines.save(rev);
         original.setStatus(InvoiceLineItem.Status.REVERSED);
         ledger.post(invoice, LedgerEntry.EntryType.CHARGE_REVERSAL, original.getTotalAmount().negate(),

@@ -46,10 +46,10 @@ public class Invoice extends TenantEntity {
 
     private String notes;
 
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private UUID createdBy;
 
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private Instant createdAt = Instant.now();
 
     private UUID finalizedBy;
@@ -62,6 +62,10 @@ public class Invoice extends TenantEntity {
 
     /** Last hospital-local date for which room (bed-day) charges have been posted. */
     private LocalDate roomChargesPostedUntil;
+
+    private UUID reopenedBy;
+    private Instant reopenedAt;
+    private String reopenReason;
 
     @Version
     private Long version;
