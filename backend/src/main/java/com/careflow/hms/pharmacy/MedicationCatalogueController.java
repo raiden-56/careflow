@@ -29,7 +29,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/medications")
 @RequiredArgsConstructor
-public class MedicationController {
+public class MedicationCatalogueController {
 
     private final MedicationCatalogueService catalogue;
 

@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.testcontainers.containers.PostgreSQLContainer;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -136,11 +137,26 @@ public abstract class IntegrationTestBase {
         return jdbc.queryForObject("SELECT id FROM departments WHERE code = ?", UUID.class, code);
     }
 
-    /** An AVAILABLE bed in a ward (by ward code). */
+    /**
+     * An AVAILABLE bed in a ward (by ward code). Test classes share one seeded database and keep admitting
+     * patients, so when the ward is full a test bed is added alongside an existing one (same room and bed type)
+     * rather than making later tests depend on execution order.
+     */
     protected UUID availableBed(String wardCode) {
-        return jdbc.queryForObject("""
+        List<UUID> free = jdbc.queryForList("""
                 SELECT b.id FROM beds b JOIN wards w ON w.id = b.ward_id
                 WHERE w.code = ? AND b.status = 'AVAILABLE' AND b.active ORDER BY b.bed_number LIMIT 1
+                """, UUID.class, wardCode);
+        if (!free.isEmpty()) {
+            return free.get(0);
+        }
+        return jdbc.queryForObject("""
+                INSERT INTO beds (organization_id, ward_id, room_id, bed_number, bed_type, isolation_capable, oxygen_supported)
+                SELECT b.organization_id, b.ward_id, b.room_id, 'T' || substr(md5(random()::text), 1, 8), b.bed_type,
+                       b.isolation_capable, b.oxygen_supported
+                FROM beds b JOIN wards w ON w.id = b.ward_id
+                WHERE w.code = ? AND b.active ORDER BY b.bed_number LIMIT 1
+                RETURNING id
                 """, UUID.class, wardCode);
     }
 
