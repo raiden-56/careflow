@@ -17,4 +17,10 @@ public interface ClinicalNoteRepository extends JpaRepository<ClinicalNote, UUID
     List<ClinicalNote> findByAdmissionIdOrderByAuthoredAtDesc(UUID admissionId);
 
     List<ClinicalNote> findByPatientIdAndReleasedToPatientTrueAndStatusOrderByAuthoredAtDesc(UUID patientId, ClinicalNote.Status status);
+
+    List<ClinicalNote> findByAdmissionIdInAndNoteTypeInOrderByAuthoredAtDesc(Collection<UUID> admissionIds,
+                                                                            Collection<ClinicalNote.NoteType> types);
+
+    Page<ClinicalNote> findByAdmissionIdInAndNoteTypeIn(Collection<UUID> admissionIds, Collection<ClinicalNote.NoteType> types,
+                                                       Pageable pageable);
 }

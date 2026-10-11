@@ -1,5 +1,7 @@
 package com.careflow.hms.clinical;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Collection;
@@ -11,4 +13,8 @@ public interface HandoverRepository extends JpaRepository<Handover, UUID> {
     List<Handover> findTop30ByWardIdInOrderByShiftDateDescCreatedAtDesc(Collection<UUID> wardIds);
 
     List<Handover> findByOrganizationIdAndStatus(UUID organizationId, Handover.Status status);
+
+    Page<Handover> findByWardIdIn(Collection<UUID> wardIds, Pageable pageable);
+
+    List<Handover> findByToUserIdAndStatus(UUID toUserId, Handover.Status status);
 }

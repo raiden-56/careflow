@@ -53,6 +53,10 @@ public class Diagnosis extends TenantEntity {
     @Column(nullable = false)
     private Instant recordedAt = Instant.now();
 
+    private String statusReason;
+    private UUID statusChangedBy;
+    private Instant statusChangedAt;
+
     @Version
     private Long version;
 }

@@ -118,6 +118,13 @@ const MAP: Record<string, StatusMeta> = {
   NO_HARM: T('No harm', 'neutral'),
   MINOR: T('Minor', 'info'),
   DEATH: T('Death', 'error'),
+  // clinical records
+  SUPERSEDED: T('Superseded', 'neutral'),
+  PROVISIONAL: T('Provisional', 'info'),
+  CONFIRMED: T('Confirmed', 'primary'),
+  DIFFERENTIAL: T('Differential', 'neutral'),
+  EMERGENCY: T('Emergency', 'error'),
+  PRELIMINARY: T('Preliminary', 'warning'),
   // lab flags
   ABNORMAL: T('Abnormal', 'warning'),
   CRITICAL_LOW: T('Critical low', 'error'),

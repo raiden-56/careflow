@@ -110,6 +110,10 @@ public class MedicationOrder extends TenantEntity {
     @Column(nullable = false)
     private boolean releasedToPatient;
 
+    private String holdReason;
+    private UUID heldBy;
+    private Instant heldAt;
+
     @Version
     private Long version;
 }
