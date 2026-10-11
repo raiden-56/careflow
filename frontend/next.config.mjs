@@ -12,6 +12,8 @@ const nextConfig = {
   reactStrictMode: true,
   output: 'standalone',
   poweredByHeader: false,
+  // Dev-only badge; keep it off the sidebar footer.
+  devIndicators: { position: 'bottom-right' },
   // The browser talks to the API through the same origin, so httpOnly SameSite=Strict cookies work
   // and no CORS is required.
   async rewrites() {

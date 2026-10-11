@@ -104,7 +104,9 @@ export function AppShell({ children }: { children: ReactNode }) {
             bgcolor: 'background.paper',
             position: 'sticky',
             top: 0,
+            alignSelf: 'flex-start',
             height: '100vh',
+            zIndex: theme.zIndex.appBar + 1,
             transition: 'width 160ms ease',
           }}
         >
@@ -116,7 +118,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         </Drawer>
       )}
       <Box sx={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column' }}>
-        <AppBar position="sticky" color="inherit" elevation={0} sx={{ borderBottom: 1, borderColor: 'divider', bgcolor: 'rgba(255,255,255,0.92)', backdropFilter: 'blur(8px)' }}>
+        <AppBar position="sticky" color="inherit" elevation={0} sx={{ borderBottom: 1, borderColor: 'divider', bgcolor: 'background.paper' }}>
           <Toolbar sx={{ minHeight: `${layout.topBarHeight}px !important`, gap: 2, px: { xs: 3, md: 5 } }}>
             {isDesktop ? (
               <Tooltip title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}>

@@ -5,7 +5,9 @@ html,
 body {
   margin: 0;
   padding: 0;
-  overflow-x: hidden;
+  /* clip, not hidden: hidden on both html and body turns body into a scroll container, which stops the
+     sticky sidebar and top bar from sticking while the window scrolls. */
+  overflow-x: clip;
 }
 
 *,
