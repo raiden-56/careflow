@@ -63,6 +63,8 @@ export const theme = createTheme({
     MuiCssBaseline: {
       styleOverrides: {
         body: { backgroundColor: colors.canvas },
+        // A card that is the only child of a grid cell fills the row height, so side-by-side cards line up.
+        '.MuiGrid-root > .MuiCard-root:only-child': { height: '100%' },
         '*:focus-visible': { outline: `2px solid ${colors.focus}`, outlineOffset: 2 },
         '@media (prefers-reduced-motion: reduce)': {
           '*': { animationDuration: '0.01ms !important', transitionDuration: '0.01ms !important' },

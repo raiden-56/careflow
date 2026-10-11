@@ -72,5 +72,5 @@ export const layout = {
   sidebarWidth: 264,
   sidebarCollapsedWidth: 76,
   topBarHeight: 64,
-  contentMaxWidth: 1440,
+  contentMaxWidth: 1920,
 } as const;

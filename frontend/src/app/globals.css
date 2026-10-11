@@ -5,9 +5,15 @@ html,
 body {
   margin: 0;
   padding: 0;
-  /* clip, not hidden: hidden on both html and body turns body into a scroll container, which stops the
-     sticky sidebar and top bar from sticking while the window scrolls. */
-  overflow-x: clip;
+}
+
+/* Overflow lives on html only (it applies to the viewport), so body never becomes a scroll container and the
+   sticky sidebar/top bar keep working. The vertical scrollbar is always shown so moving between short and long
+   pages does not change the layout width; MUI dialogs and menus then lock scrolling on html and compensate
+   for the hidden scrollbar exactly, so opening them does not shift the page either. */
+html {
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 
 *,

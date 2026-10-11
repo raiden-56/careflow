@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode } from 'react';
+import { ReactNode, useLayoutEffect, useRef, useState } from 'react';
 import {
   Box,
   Card,
@@ -96,6 +96,29 @@ export function DataTable<T>(props: DataTableProps<T>) {
   } = props;
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  // Container-aware layout: a table that does not fit its box (e.g. in a narrow dashboard column) switches to
+  // cards instead of scrolling sideways, and switches back once the box is wide enough for the table again.
+  const rootRef = useRef<HTMLDivElement>(null);
+  const tableWidth = useRef(0);
+  const [narrow, setNarrow] = useState(false);
+  useLayoutEffect(() => {
+    const el = rootRef.current;
+    if (!el || isMobile) return;
+    const measure = () => {
+      const available = el.clientWidth;
+      const table = el.querySelector('table');
+      if (table) {
+        tableWidth.current = table.scrollWidth;
+        if (tableWidth.current > available + 1) setNarrow(true);
+      } else if (tableWidth.current && available >= tableWidth.current) {
+        setNarrow(false);
+      }
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [isMobile, narrow, rows, loading]);
 
   if (error) {
     return (
@@ -125,11 +148,20 @@ export function DataTable<T>(props: DataTableProps<T>) {
       />
     ) : null;
 
-  if (isMobile) {
+  if (isMobile || narrow) {
     const primary = columns.find((c) => c.primary) ?? columns[0];
     return (
-      <Box>
-        <Stack spacing={3} sx={{ p: 3, opacity: loading ? 0.6 : 1 }}>
+      <Box ref={rootRef}>
+        <Box
+          sx={{
+            display: 'grid',
+            // One column on phones; on wider boxes cards fill the width in as many columns as fit.
+            gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 320px), 1fr))',
+            gap: 3,
+            p: 3,
+            opacity: loading ? 0.6 : 1,
+          }}
+        >
           {rows.map((row) => {
             const content = mobileCard ? (
               mobileCard(row)
@@ -163,14 +195,14 @@ export function DataTable<T>(props: DataTableProps<T>) {
               </Card>
             );
           })}
-        </Stack>
+        </Box>
         {pagination}
       </Box>
     );
   }
 
   return (
-    <Box>
+    <Box ref={rootRef}>
       <TableContainer sx={{ opacity: loading ? 0.6 : 1, transition: 'opacity 120ms' }}>
         <Table size={dense ? 'small' : 'medium'} aria-label={ariaLabel} aria-busy={loading ? 'true' : 'false'}>
           <TableHead>

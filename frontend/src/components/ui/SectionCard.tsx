@@ -17,7 +17,7 @@ export interface SectionCardProps {
 /** Standard content card with an optional header row. */
 export function SectionCard({ title, subtitle, action, children, flush, sx, id }: SectionCardProps) {
   return (
-    <Card id={id} sx={{ overflow: 'hidden', ...sx }}>
+    <Card id={id} sx={{ overflow: 'hidden', display: 'flex', flexDirection: 'column', ...sx }}>
       {(title || action) && (
         <Stack
           direction="row"
@@ -41,7 +41,7 @@ export function SectionCard({ title, subtitle, action, children, flush, sx, id }
           {action && <Box sx={{ flexShrink: 0 }}>{action}</Box>}
         </Stack>
       )}
-      <Box sx={flush ? undefined : { px: 5, pb: 5, pt: title || action ? 3 : 5 }}>{children}</Box>
+      <Box sx={{ flex: 1, minHeight: 0, ...(flush ? {} : { px: 5, pb: 5, pt: title || action ? 3 : 5 }) }}>{children}</Box>
     </Card>
   );
 }

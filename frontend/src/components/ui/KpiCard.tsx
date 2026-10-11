@@ -2,7 +2,7 @@
 
 import { ReactNode } from 'react';
 import Link from 'next/link';
-import { Box, Card, CardActionArea, Skeleton, Stack, Typography } from '@mui/material';
+import { Box, Card, CardActionArea, Skeleton, Typography } from '@mui/material';
 import type { LucideIcon } from 'lucide-react';
 import { StatusTone } from '@/lib/status';
 import { toneColors } from './StatusChip';
@@ -21,7 +21,18 @@ export interface KpiCardProps {
 export function KpiCard({ label, value, hint, icon: Icon, tone = 'primary', href, loading }: KpiCardProps) {
   const t = toneColors(tone);
   const body = (
-    <Stack direction="row" spacing={3} alignItems="flex-start" sx={{ p: 4, height: '100%' }}>
+    <Box
+      sx={{
+        display: 'flex',
+        alignItems: 'flex-start',
+        gap: 3,
+        p: 4,
+        height: '100%',
+        // Narrow tiles (many per row, or beside the sidebar) put the icon above the text and let the label
+        // wrap instead of truncating it.
+        '@container kpi (max-width: 200px)': { flexDirection: 'column', gap: 2, p: 3.5 },
+      }}
+    >
       {Icon && (
         <Box
           sx={{
@@ -40,7 +51,17 @@ export function KpiCard({ label, value, hint, icon: Icon, tone = 'primary', href
         </Box>
       )}
       <Box sx={{ minWidth: 0 }}>
-        <Typography variant="body2" color="text.secondary" fontWeight={500} noWrap>
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          fontWeight={500}
+          sx={{
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            '@container kpi (max-width: 200px)': { whiteSpace: 'normal' },
+          }}
+        >
           {label}
         </Typography>
         {loading ? (
@@ -56,10 +77,10 @@ export function KpiCard({ label, value, hint, icon: Icon, tone = 'primary', href
           </Typography>
         )}
       </Box>
-    </Stack>
+    </Box>
   );
   return (
-    <Card sx={{ height: '100%' }}>
+    <Card sx={{ height: '100%', containerType: 'inline-size', containerName: 'kpi' }}>
       {href ? (
         <CardActionArea component={Link} href={href} sx={{ height: '100%' }}>
           {body}
