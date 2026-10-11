@@ -19,8 +19,6 @@ public interface NotificationRepository extends JpaRepository<Notification, UUID
 
     Optional<Notification> findFirstByRecipientUserIdAndDedupeKey(UUID recipientUserId, String dedupeKey);
 
-    long countByDedupeKey(String dedupeKey);
-
     Page<Notification> findByRecipientUserId(UUID recipientUserId, Pageable pageable);
 
     Page<Notification> findByRecipientUserIdAndReadAtIsNull(UUID recipientUserId, Pageable pageable);
