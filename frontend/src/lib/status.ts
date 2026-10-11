@@ -149,7 +149,6 @@ const MAP: Record<string, StatusMeta> = {
   FAILURE: T('Failed', 'warning'),
   ARCHIVED: T('Archived', 'neutral'),
   DECLINED: T('Declined', 'neutral'),
-  IN_REVIEW: T('In review', 'info'),
   SUSPENDED: T('Suspended', 'error'),
   DEV_ADAPTER: T('Dev adapter', 'info'),
   SANDBOX: T('Sandbox', 'warning'),
