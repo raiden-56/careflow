@@ -74,6 +74,9 @@ public class MedicationAdministration extends TenantEntity {
     private Instant followUpAt;
     private String responsibleTeam;
 
+    @Column(nullable = false)
+    private int overdueEscalationLevel;
+
     @Version
     private Long version;
 }

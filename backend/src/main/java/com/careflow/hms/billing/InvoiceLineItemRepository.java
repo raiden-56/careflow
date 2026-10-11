@@ -23,4 +23,7 @@ public interface InvoiceLineItemRepository extends JpaRepository<InvoiceLineItem
                                                                              InvoiceLineItem.Status status);
 
     boolean existsByInvoiceIdAndStatus(UUID invoiceId, InvoiceLineItem.Status status);
+    /** Posted charge lines captured for a clinical source (e.g. a lab order or procedure). */
+    List<InvoiceLineItem> findBySourceTypeAndSourceIdAndStatus(InvoiceLineItem.SourceType sourceType, UUID sourceId,
+                                                               InvoiceLineItem.Status status);
 }

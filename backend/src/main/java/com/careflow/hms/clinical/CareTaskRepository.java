@@ -13,4 +13,8 @@ public interface CareTaskRepository extends JpaRepository<CareTask, UUID> {
     List<CareTask> findByAdmissionIdInAndStatusInOrderByDueAtAsc(Collection<UUID> admissionIds, Collection<CareTask.Status> statuses);
 
     List<CareTask> findByAdmissionIdAndStatusIn(UUID admissionId, Collection<CareTask.Status> statuses);
+
+    List<CareTask> findBySourceTypeAndSourceIdAndStatusIn(String sourceType, UUID sourceId, Collection<CareTask.Status> statuses);
+
+    List<CareTask> findByAdmissionIdInOrderByDueAtAsc(Collection<UUID> admissionIds);
 }

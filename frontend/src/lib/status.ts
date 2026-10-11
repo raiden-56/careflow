@@ -155,6 +155,13 @@ const MAP: Record<string, StatusMeta> = {
   LIVE: T('Live (not connected)', 'error'),
   UP: T('Up', 'success'),
   DOWN: T('Down', 'error'),
+  // clinical records
+  SUPERSEDED: T('Superseded', 'neutral'),
+  PROVISIONAL: T('Provisional', 'info'),
+  CONFIRMED: T('Confirmed', 'primary'),
+  DIFFERENTIAL: T('Differential', 'neutral'),
+  EMERGENCY: T('Emergency', 'error'),
+  PRELIMINARY: T('Preliminary', 'warning'),
   // lab flags
   ABNORMAL: T('Abnormal', 'warning'),
   CRITICAL_LOW: T('Critical low', 'error'),

@@ -39,6 +39,7 @@ public class HandoverItem {
     private String pendingTasks;
     private String outstandingItems;
     private String escalations;
+    private String pendingMedications;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

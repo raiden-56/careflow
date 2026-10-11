@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface LabOrderRepository extends JpaRepository<LabOrder, UUID> {
@@ -23,4 +24,12 @@ public interface LabOrderRepository extends JpaRepository<LabOrder, UUID> {
                                   Pageable pageable);
 
     long countByOrganizationIdAndStatusIn(UUID organizationId, Collection<LabOrder.Status> statuses);
+
+    Optional<LabOrder> findByOrganizationIdAndOrderNumber(UUID organizationId, String orderNumber);
+
+    @Query("select o from LabOrder o where o.admissionId in :ids and o.status in :statuses")
+    Page<LabOrder> findForAdmissions(@Param("ids") Collection<UUID> admissionIds,
+                                     @Param("statuses") Collection<LabOrder.Status> statuses, Pageable pageable);
+
+    List<LabOrder> findByPatientIdAndStatusIn(UUID patientId, Collection<LabOrder.Status> statuses);
 }

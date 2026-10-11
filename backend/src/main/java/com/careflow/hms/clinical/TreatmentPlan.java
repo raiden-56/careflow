@@ -55,6 +55,10 @@ public class TreatmentPlan extends TenantEntity {
 
     private UUID supersededById;
 
+    private String revisionReason;
+    private UUID releasedBy;
+    private Instant releasedAt;
+
     @Version
     private Long version;
 }
