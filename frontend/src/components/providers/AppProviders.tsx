@@ -8,6 +8,7 @@ import { SnackbarProvider } from 'notistack';
 import { theme } from '@/theme/theme';
 import { ApiError } from '@/lib/api/client';
 import { AuthProvider } from '@/lib/auth/AuthProvider';
+import { PwaProvider } from '@/lib/pwa';
 
 function makeQueryClient() {
   return new QueryClient({
@@ -41,7 +42,9 @@ export function AppProviders({ children }: { children: ReactNode }) {
             anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
             preventDuplicate
           >
-            <AuthProvider>{children}</AuthProvider>
+            <PwaProvider>
+              <AuthProvider>{children}</AuthProvider>
+            </PwaProvider>
           </SnackbarProvider>
         </QueryClientProvider>
       </ThemeProvider>

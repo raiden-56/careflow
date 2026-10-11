@@ -30,5 +30,9 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|icon.svg|robots.txt).*)'],
+  // PWA files (manifest, service worker, offline page, icons) must load without a session so the app can be
+  // installed and the offline page can be cached.
+  matcher: [
+    '/((?!api|_next/static|_next/image|favicon.ico|icon.svg|robots.txt|manifest.webmanifest|sw.js|offline.html|icons/).*)',
+  ],
 };

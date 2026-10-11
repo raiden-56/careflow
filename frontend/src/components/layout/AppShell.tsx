@@ -4,6 +4,7 @@ import { ReactNode, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
+  Alert,
   AppBar,
   Avatar,
   Box,
@@ -20,11 +21,12 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import { LogOut, Menu as MenuIcon, PanelLeftClose, PanelLeftOpen, UserRound, Bell } from 'lucide-react';
+import { LogOut, Menu as MenuIcon, PanelLeftClose, PanelLeftOpen, UserRound, Bell, Download, WifiOff } from 'lucide-react';
 import { useAuth } from '@/lib/auth/AuthProvider';
 import { ROLE_HOME, ROLE_LABEL, ROLE_PREFIXES, SHARED_ROUTES } from '@/lib/nav';
 import { initials } from '@/lib/format';
 import { useNotificationStream } from '@/lib/realtime';
+import { usePwa } from '@/lib/pwa';
 import { colors, layout } from '@/theme/tokens';
 import { PageSkeleton } from '@/components/ui/States';
 import { SidebarContent } from './Sidebar';
@@ -37,6 +39,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up('lg'));
   const { me, isLoading, error, logout } = useAuth();
+  const pwa = usePwa();
   const router = useRouter();
   const pathname = usePathname() ?? '/';
   const [collapsed, setCollapsed] = useState(false);
@@ -174,6 +177,19 @@ export function AppShell({ children }: { children: ReactNode }) {
                 </ListItemIcon>
                 Notifications
               </MenuItem>
+              {pwa.canInstall && (
+                <MenuItem
+                  onClick={() => {
+                    setMenuAnchor(null);
+                    pwa.install();
+                  }}
+                >
+                  <ListItemIcon>
+                    <Download size={16} />
+                  </ListItemIcon>
+                  Install CareFlow app
+                </MenuItem>
+              )}
               <Divider />
               <MenuItem
                 onClick={() => {
@@ -189,6 +205,16 @@ export function AppShell({ children }: { children: ReactNode }) {
             </Menu>
           </Toolbar>
         </AppBar>
+        {pwa.offline && (
+          <Alert
+            severity="warning"
+            icon={<WifiOff size={18} />}
+            role="status"
+            sx={{ borderRadius: 0, borderBottom: 1, borderColor: 'divider', position: 'sticky', top: layout.topBarHeight + 1, zIndex: theme.zIndex.appBar - 1 }}
+          >
+            You&apos;re offline. Records shown may be out of date and changes can&apos;t be saved until the connection returns.
+          </Alert>
+        )}
         <Box component="main" id="main" tabIndex={-1} sx={{ flex: 1, px: { xs: 4, md: 8 }, py: { xs: 5, md: 7 }, width: '100%', maxWidth: layout.contentMaxWidth, mx: 'auto', outline: 'none' }}>
           {children}
         </Box>

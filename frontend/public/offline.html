@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0F766E" />
+    <title>Offline · CareFlow HMS</title>
+    <link rel="icon" href="/icons/icon-192.png" />
+    <style>
+      :root { color-scheme: light; }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 24px 16px;
+        background: #f6f5f1;
+        color: #10263a;
+        font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      }
+      main {
+        width: 100%;
+        max-width: 440px;
+        background: #fff;
+        border: 1px solid #e4e2dc;
+        border-radius: 16px;
+        padding: 32px 28px;
+        text-align: center;
+        box-shadow: 0 1px 2px rgba(16, 38, 58, 0.05);
+      }
+      .mark { width: 56px; height: 56px; margin: 0 auto 20px; }
+      h1 { font-size: 1.25rem; margin: 0 0 8px; }
+      p { margin: 0 0 12px; color: #4b5d6e; line-height: 1.5; font-size: 0.9375rem; }
+      button {
+        margin-top: 12px;
+        min-height: 42px;
+        padding: 0 20px;
+        border: 0;
+        border-radius: 10px;
+        background: #0f766e;
+        color: #fff;
+        font: inherit;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      button:focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }
+      .note { margin-top: 20px; font-size: 0.8125rem; color: #6b7b8a; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <svg class="mark" viewBox="0 0 32 32" aria-hidden="true">
+        <rect width="32" height="32" rx="8" fill="#0F766E" />
+        <path d="M6 17h5l2.5-5 4 10 3-7H26" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+      <h1>You're offline</h1>
+      <p>CareFlow needs a connection to show patient records, orders and bills. Nothing is stored on this device.</p>
+      <p>Check your Wi-Fi or network, then try again.</p>
+      <button type="button" onclick="location.reload()">Try again</button>
+      <p class="note">This page reloads by itself when the connection returns.</p>
+    </main>
+    <script>
+      window.addEventListener('online', () => location.reload());
+    </script>
+  </body>
+</html>
