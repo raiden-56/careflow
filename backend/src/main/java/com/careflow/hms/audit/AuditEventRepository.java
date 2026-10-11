@@ -25,6 +25,31 @@ public interface AuditEventRepository extends JpaRepository<AuditEvent, UUID> {
                             @Param("outcome") AuditEvent.Outcome outcome,
                             @Param("from") Instant from, @Param("to") Instant to, Pageable pageable);
 
+    /** Hospital audit search (organization-scoped) with actor-name and entity filters. */
+    @Query("""
+            select e from AuditEvent e
+            where e.organizationId = :orgId
+              and (:actorId is null or e.actorUserId = :actorId)
+              and (:actorName is null or lower(e.actorName) like :actorName)
+              and (:patientId is null or e.patientId = :patientId)
+              and (:action is null or e.action = :action)
+              and (:entityType is null or e.entityType = :entityType)
+              and (:outcome is null or e.outcome = :outcome)
+              and e.occurredAt >= :from and e.occurredAt < :to
+            """)
+    Page<AuditEvent> searchOrganization(@Param("orgId") UUID orgId, @Param("actorId") UUID actorId,
+                                        @Param("actorName") String actorName, @Param("patientId") UUID patientId,
+                                        @Param("action") String action, @Param("entityType") String entityType,
+                                        @Param("outcome") AuditEvent.Outcome outcome,
+                                        @Param("from") Instant from, @Param("to") Instant to, Pageable pageable);
+
+    @Query("select distinct e.action from AuditEvent e where e.organizationId = :orgId order by e.action")
+    java.util.List<String> distinctActions(@Param("orgId") UUID orgId);
+
+    @Query("select e from AuditEvent e where e.organizationId = :orgId and e.entityType = :entityType and e.entityId = :entityId order by e.occurredAt")
+    java.util.List<AuditEvent> findEntityHistory(@Param("orgId") UUID orgId, @Param("entityType") String entityType,
+                                                 @Param("entityId") UUID entityId);
+
     /** Staff access to a patient's records - shown to the patient for access transparency. */
     @Query("""
             select e from AuditEvent e

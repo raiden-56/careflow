@@ -33,5 +33,17 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     Page<User> search(@Param("orgId") UUID orgId, @Param("role") Role role, @Param("status") User.Status status,
                       @Param("q") String q, Pageable pageable);
 
+    /** Staff accounts only (never patients or platform super administrators), so paging totals are accurate. */
+    @Query("""
+            select u from User u
+            where u.organizationId = :orgId
+              and u.role not in (com.careflow.hms.security.Role.PATIENT, com.careflow.hms.security.Role.SUPER_ADMIN)
+              and (:role is null or u.role = :role)
+              and (:status is null or u.status = :status)
+              and (:q is null or lower(u.fullName) like :q or lower(u.email) like :q)
+            """)
+    Page<User> searchStaff(@Param("orgId") UUID orgId, @Param("role") Role role, @Param("status") User.Status status,
+                           @Param("q") String q, Pageable pageable);
+
     long countByOrganizationIdAndRole(UUID organizationId, Role role);
 }

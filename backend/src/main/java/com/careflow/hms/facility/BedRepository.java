@@ -24,6 +24,8 @@ public interface BedRepository extends JpaRepository<Bed, UUID> {
 
     List<Bed> findByOrganizationIdAndWardIdAndActiveTrue(UUID organizationId, UUID wardId);
 
+    List<Bed> findByOrganizationIdAndWardId(UUID organizationId, UUID wardId);
+
     List<Bed> findByIdIn(Collection<UUID> ids);
 
     long countByOrganizationIdAndActiveTrueAndStatus(UUID organizationId, Bed.Status status);

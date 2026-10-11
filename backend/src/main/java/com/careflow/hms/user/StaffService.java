@@ -69,7 +69,7 @@ public class StaffService {
     public PageResponse<StaffView> search(Role role, User.Status status, String q, int page, int size, String sort) {
         UUID org = TenantContext.requireOrganizationId();
         var pageable = Paging.of(page, size, sort, SORTS, Sort.by("fullName"));
-        var result = users.search(org, role, status, Paging.likePattern(q), pageable);
+        var result = users.searchStaff(org, role, status, Paging.likePattern(q), pageable);
         List<StaffView> content = result.getContent().stream()
                 .filter(u -> u.getRole() != Role.PATIENT && u.getRole() != Role.SUPER_ADMIN)
                 .map(this::view).toList();
@@ -233,6 +233,14 @@ public class StaffService {
         removed.removeAll(permissions);
         audit.record("ROLE_PERMISSIONS_CHANGED", "ROLE", null, null, role + " +" + added + " -" + removed);
         return roleMatrix();
+    }
+
+    /**
+     * Issues a set-password invitation (3-day link through the configured mail gateway). Used by
+     * platform provisioning, which creates hospital administrator accounts in another organization.
+     */
+    public void sendInvitation(User u) {
+        sendInvite(u);
     }
 
     private void sendInvite(User u) {
