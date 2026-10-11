@@ -51,6 +51,13 @@ public class DischargeSummary extends TenantEntity {
     @Column(nullable = false)
     private boolean releasedToPatient;
 
+    private UUID releasedBy;
+    private Instant releasedAt;
+    private UUID updatedBy;
+
+    @Column(nullable = false)
+    private Instant updatedAt = Instant.now();
+
     @Version
     private Long version;
 }
